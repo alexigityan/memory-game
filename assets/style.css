@@ -1,0 +1,23 @@
+.container {
+    height:70%;
+    width:80%;
+    margin:auto;
+}
+
+.block {
+    height:20%;
+    width:11%;
+    margin: 0 2% 2% 0;
+    display:inline-block;
+    border:1px solid black;
+    border-radius:7%;
+    vertical-align:top;
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+}
+
+.block:hover {
+    background-color:lightgray;
+}
