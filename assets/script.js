@@ -1,27 +1,35 @@
-Array.from(document.getElementsByClassName("block")).forEach(elem=>elem.addEventListener("click",openBlock));
+Array.from(document.getElementsByClassName("block")).forEach(elem=>makeClickable(elem));
 
 const session = document.getElementById("session").getAttribute("session");
-console.log(session);
 let openBlocks = [];
 let contents = [];
 let pairedBlocks = [];
 
+function makeClickable(block) {
+    block.addEventListener("click",openBlock);
+    block.classList.add("clickable");
+}
+
+function removeClickable(block) {
+    block.removeEventListener("click",openBlock);
+    block.classList.remove("clickable");
+}
+
 function progressGame() {
-    if(openBlocks.length > 1) {
-        if(contents[0]===contents[1]) {
-            pairedBlocks.concat(openBlocks);
-            openBlocks=[];
-            contents=[];
-        } else
-            closeOpenBlocks(1500);
+    if(openBlocks.length > 1 && contents[0]===contents[1]) {
+        pairedBlocks.concat(openBlocks);
+        openBlocks=[];
+        contents=[];
     }
 }
 
-
 function openBlock(evt) {
-    if(openBlocks.length<2 && !openBlocks.includes(evt.target.id)) {
-        let block = evt.target;   
-        openBlocks.push(block.id);
+    if(openBlocks.length===2)
+        closeOpenBlocks();
+    if(openBlocks.length<2 && !openBlocks.includes(evt.target)) {
+        let block = evt.target;
+        removeClickable(block);   
+        openBlocks.push(block);
         fetch("/"+session+"/"+block.id)
             .then((res)=>res.text())
             .then((text)=>{
@@ -32,10 +40,11 @@ function openBlock(evt) {
     }
 }
 
-function closeOpenBlocks(timeout) {
-    setTimeout( ()=>{
-        openBlocks.forEach(id=>document.getElementById(id).style="");
-        openBlocks=[];
-        contents=[];
-    },timeout);
+function closeOpenBlocks() {
+    openBlocks.forEach(block=>{
+        block.style="";
+        makeClickable(block);
+    });
+    openBlocks=[];
+    contents=[];
 }

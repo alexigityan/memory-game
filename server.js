@@ -25,8 +25,6 @@ function makeBlocks(content) {
     return blocks;
 }
 
-
-
 function setDestroyTimer(session) {
     setTimeout(()=>{
         if(sessions[session]) {
