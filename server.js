@@ -4,8 +4,8 @@ const app = express();
 app.set("view engine", "pug");
 app.use(express.static("assets"));
 
-const content = ["apple", "penguin", "ship", "crystal", "cactus", "butterfly", "umbrella", "teapot",
-                    "fish", "moon", "mushroom", "peace", "infinity", "paw"];
+const content = ["apple", "penguin", "lollipop", "crystal", "cactus", "butterfly", "umbrella", "teapot",
+                    "fish", "moon", "mushroom", "peace", "infinity", "paw", "bomb"];
 
 function makeBlocks(content) {
     let blocks = Array(content.length*2);
@@ -29,7 +29,7 @@ function setDestroyTimer(session) {
     setTimeout(()=>{
         if(sessions[session]) {
             delete sessions[session];
-            console.log(`destroying session ${session}`);
+            console.log(`destroying session ${session} on time-out`);
         }
     },300000)
 }
@@ -50,6 +50,16 @@ app.get("/", (req, res)=>{
     setDestroyTimer(session);
 });
 
+app.get("/remove/:session", (req,res)=>{
+    if(sessions[req.params.session]) {
+        delete sessions[req.params.session];
+        console.log(`destroying session ${req.params.session} on client request`);
+        res.end();
+    } else {
+        res.end();
+    }
+});
+
 app.get("/:session/:id", (req, res)=>{
     if (sessions[req.params.session]) {
         res.set("Content-Type","text/plain");
@@ -57,13 +67,10 @@ app.get("/:session/:id", (req, res)=>{
         res.send(sessions[req.params.session].blocks[req.params.id]);
     } else {
         res.status(404);
+        res.end();
     }
 });
 
-app.get("/:session/remove", (req,res)=>{
-    if(sessions[req.params.session]) {
-        delete sessions[req.params.session];
-    }
-});
+
 
 app.listen(3000, ()=>console.log("listening on 3000"));

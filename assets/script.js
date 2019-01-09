@@ -1,4 +1,5 @@
-Array.from(document.getElementsByClassName("block")).forEach(elem=>makeClickable(elem));
+const blocks = Array.from(document.getElementsByClassName("block"));
+blocks.forEach(elem=>makeClickable(elem));
 
 const session = document.getElementById("session").getAttribute("session");
 let openBlocks = [];
@@ -17,10 +18,12 @@ function removeClickable(block) {
 
 function progressGame() {
     if(openBlocks.length > 1 && contents[0]===contents[1]) {
-        pairedBlocks.concat(openBlocks);
+        pairedBlocks = pairedBlocks.concat(...openBlocks);
         openBlocks=[];
         contents=[];
     }
+    if(pairedBlocks.length === blocks.length)
+        endGame("win");
 }
 
 function openBlock(evt) {
@@ -31,7 +34,7 @@ function openBlock(evt) {
         removeClickable(block);   
         openBlocks.push(block);
         fetch("/"+session+"/"+block.id)
-            .then((res)=>res.text())
+            .then((res)=>(res.status===200) ? res.text() : endGame())
             .then((text)=>{
                 block.style = `background-image:url(/icons/${text}.png)`;
                 contents.push(text);
@@ -47,4 +50,30 @@ function closeOpenBlocks() {
     });
     openBlocks=[];
     contents=[];
+}
+
+function startNewGame() {
+    fetch("/remove/"+session).then(()=>location.reload());
+}
+
+function endGame(result) {
+    let modalBckg = document.createElement("div");
+    modalBckg.classList.add("modal-background");
+    let modalGray = document.createElement("div");
+    modalGray.classList.add("modal-gray");    
+    let modal = document.createElement("div");
+    modal.classList.add("info");
+    let p = document.createElement("p");
+    let button = document.createElement("button");
+    let text = (result==="win") ? document.createTextNode("You've won!") : document.createTextNode("Your time's up!") ;
+    p.appendChild(text);
+    let buttonText = document.createTextNode("Start Again");
+    button.appendChild(buttonText);
+    button.addEventListener("click",startNewGame);
+    modal.appendChild(p);
+    modal.appendChild(button);
+    modalBckg.appendChild(modal);
+    modalBckg.appendChild(modalGray);
+    document.body.appendChild(modalBckg);
+    
 }
