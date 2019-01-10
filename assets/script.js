@@ -62,7 +62,7 @@ function endGame(result) {
     let modalGray = document.createElement("div");
     modalGray.classList.add("modal-gray");    
     let modal = document.createElement("div");
-    modal.classList.add("info");
+    modal.id ="info";
     let p = document.createElement("p");
     let button = document.createElement("button");
     let text = (result==="win") ? document.createTextNode("You've won!") : document.createTextNode("Your time's up!") ;
@@ -71,9 +71,24 @@ function endGame(result) {
     button.appendChild(buttonText);
     button.addEventListener("click",startNewGame);
     modal.appendChild(p);
+    if(result==="win"){
+        let clicks = document.createElement("p");
+        clicks.id="clicks";
+        modal.appendChild(clicks);
+        let xhr = new XMLHttpRequest;
+        xhr.open("GET","/clicks/"+session);
+        xhr.send();
+        xhr.onload=()=>{
+            if(xhr.status === 200) {
+                let text = document.createTextNode(`Took you ${xhr.response} clicks`);
+                document.getElementById("clicks").appendChild(text);
+            }
+        };
+    }
     modal.appendChild(button);
     modalBckg.appendChild(modal);
     modalBckg.appendChild(modalGray);
+
     document.body.appendChild(modalBckg);
     
 }
