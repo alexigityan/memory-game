@@ -45,6 +45,7 @@ app.get("/", (req, res)=>{
     let session = makeSession();
     console.log(`creating session ${session}`);
     sessions[session] = {};
+    sessions[session].clicks = 0;
     sessions[session].blocks = makeBlocks(content);
     res.render("index", {session:session, blocks:sessions[session].blocks});
     setDestroyTimer(session);
@@ -60,8 +61,20 @@ app.get("/remove/:session", (req,res)=>{
     }
 });
 
+app.get("/clicks/:session", (req,res)=>{
+    if(sessions[req.params.session]) {
+        res.set("Content-Type","text/plain");
+        res.status(200);
+        res.send(sessions[req.params.session].clicks.toString());
+    } else {
+        res.end();
+    }   
+});
+
+
 app.get("/:session/:id", (req, res)=>{
     if (sessions[req.params.session]) {
+        sessions[req.params.session].clicks++;
         res.set("Content-Type","text/plain");
         res.status(200);
         res.send(sessions[req.params.session].blocks[req.params.id]);
