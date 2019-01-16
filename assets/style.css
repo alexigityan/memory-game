@@ -68,6 +68,13 @@ html, body {
 
 }
 
+#info input {
+    width:30%;
+    display:block;
+    margin:auto;
+    margin-bottom:5%;
+}
+
 #info button {
     font-size: 150%;
     width:30%;
@@ -76,7 +83,7 @@ html, body {
     border: none;
     margin: auto;
     display: block;
-    margin-bottom: 10%;
+    margin-bottom: 5%;
     cursor:pointer;
 }
 

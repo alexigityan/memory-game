@@ -1,0 +1,34 @@
+doctype html
+html
+    head
+        title Memory
+        link(rel="stylesheet" type="text/css" href="/style.css")
+        meta(id="session" session=session)
+        if player
+           meta(id="player" player=player team=team)
+    body
+        div(class="container") 
+            each val, index in blocks
+                div(class="block" id=index)
+            if player
+                div(class="modal-background")
+                    div(class="modal-gray")
+                    div(id="info")
+                        -
+                            if(team==="blue") 
+                                var teamBlue = true
+
+                        if teamBlue
+                            p(id="joinText") Tell your friend to join room #{session}
+                            button(id="ready") Waiting...
+                        else 
+                            p You've joined room #{session}
+                            button(id="ready") Ready
+
+
+
+
+        if player
+            script(src="/script-2p.js")
+        else
+            script(src="/script-1p.js")

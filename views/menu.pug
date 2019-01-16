@@ -1,0 +1,17 @@
+doctype html
+html
+    head
+        title Memory Menu
+        link(rel="stylesheet" type="text/css" href="/style.css")
+        meta(id="session" session=session)
+    body
+        div(class="container")
+            div(class="modal-background")
+                div(class="modal-gray")
+                div(id="info")
+                    button(id="1p") Start 1 Player Game
+                    button(id="2pStart") Start 2 Player Game
+                    input(type="text" id="gameRoom")
+                    button(id="2pJoin") Join 2 Player Game
+
+        script(src="/script-menu.js")
