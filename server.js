@@ -122,8 +122,10 @@ class Player {
         this.clicks++;
         if(this.openBlocks.length===2) {
             this.closeBlocks(session);
-        } 
-        if(this.openBlocks.length<2) {
+        }
+ 
+        if(!sessions[session].blueOpenBlocks.includes(blockId) && !sessions[session].redOpenBlocks.includes(blockId)) {
+            (this.team === "blue") ? sessions[session].blueOpenBlocks.push(blockId) : sessions[session].redOpenBlocks.push(blockId); 
             this.openBlocks.push(blockId); 
             this.contents.push(iconId);
             if(blockId.toString().length<2)
@@ -143,6 +145,7 @@ class Player {
                 elem = "0"+elem;
             emitter.emit(session+"closeblock", "c"+elem);
         });
+        (this.team === "blue") ? sessions[session].blueOpenBlocks = [] : sessions[session].redOpenBlocks = [];
         this.openBlocks = [];
         this.contents = [];
     }
@@ -156,6 +159,8 @@ app.get("/2p/start", (req, res)=>{
     let player = makePlayer(session);
     sessions[session][player] = new Player("blue");
     sessions[session].blocks = makeBlocks(content);
+    sessions[session].blueOpenBlocks = [];
+    sessions[session].redOpenBlocks = [];
     sessions[session].ready = 0;
     sessions[session].pairedBlocks = 0;
     res.render("game", {session:session, player:player, blocks:sessions[session].blocks, team:sessions[session][player].team});
