@@ -1,14 +1,37 @@
 
-document.getElementById("1p").addEventListener("click", ()=>window.location.href="/1p");
+document.getElementById("1p").addEventListener("click", ()=>window.location.href="/1p" );
 
-document.getElementById("2pStart").addEventListener("click", startTwoPlayer);
-document.getElementById("2pJoin").addEventListener("click", joinTwoPlayer);
+document.getElementById("2pStart").addEventListener("click", ()=>window.location.href="/2p/start");
+let joinButton = document.getElementById("2pJoin");
+let room = document.getElementById("gameRoom");
 
-function startTwoPlayer() {
-    window.location.href="/2p/start/"
+room.addEventListener("change", toggleButton);
+
+function toggleButton() {
+    if (room.value) {
+        joinButton.disabled = false;
+        joinButton.classList.add("clickable");
+        joinButton.addEventListener("click", joinTwoPlayer);
+    } else {
+        joinButton.disabled = true;
+        joinButton.classList.remove("clickable");
+        joinButton.removeEventListener("click", joinTwoPlayer);       
+    }
 }
 
 function joinTwoPlayer() {
-    let room = document.getElementById("gameRoom").value;
-    window.location.href="/2p/join/"+room;
+    let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if(xhr.status === 200) {
+            window.location.href="/2p/join/"+room.value;
+        } else {
+            room.value = "";
+            room.placeholder = "Room "+room.value+" Not Found";
+        }
+    };
+    xhr.open("get", "/2p/check/"+room.value);
+    xhr.send();
 }
+
+
+

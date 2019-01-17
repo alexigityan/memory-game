@@ -170,6 +170,21 @@ app.get("/2p/join/:session", (req, res)=>{
         sessions[session][player] = new Player("red");
         res.render("game", {session:session, player:player, blocks:sessions[session].blocks, team:sessions[session][player].team});
         emitter.emit(session+"joined");    
+    } else {
+        res.status(404);
+        res.end();
+    }
+});
+
+
+app.get("/2p/check/:session", (req, res)=>{
+    let session = req.params.session;
+    if(sessions[session]) {
+        res.status(200);
+        res.end();
+    } else {
+        res.status(404);
+        res.end();
     }
 });
 

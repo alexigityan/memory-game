@@ -3,15 +3,19 @@ const player = document.getElementById("player").getAttribute("player");
 const team = document.getElementById("player").getAttribute("team");
 const ready = document.getElementById("ready");
 
-if(team === "red") {
-    ready.addEventListener("click", ()=>{
-        let xhr = new XMLHttpRequest();
-        xhr.onload = () => ready.innerText = "Waiting...";
-        xhr.open("get", "/2p/ready/"+session);
-        xhr.send(); 
-    });
-}
+if(team === "red")
+    ready.addEventListener("click", clickReady);
 
+
+function clickReady() {
+    ready.removeEventListener("click",clickReady);
+    ready.disabled = true;
+    ready.classList.remove("clickable");
+    let xhr = new XMLHttpRequest();
+    xhr.onload = () => ready.innerText = "Waiting...";
+    xhr.open("get", "/2p/ready/"+session);
+    xhr.send();   
+}
 
 let blocks;
 
@@ -22,12 +26,9 @@ events.onmessage = (evt) => {
     if(evt.data === "j") {
         document.getElementById("joinText").innerText = "Your friend has joined!";
         ready.innerText = "Ready";
-        ready.addEventListener("click", ()=>{
-            let xhr = new XMLHttpRequest();
-            xhr.onload = () => ready.innerText = "Waiting...";
-            xhr.open("get", "/2p/ready/"+session);
-            xhr.send(); 
-        });
+        ready.disabled = false;
+        ready.classList.add("clickable");
+        ready.addEventListener("click", clickReady);
     } else if(evt.data === "s") {
         document.getElementsByClassName("container")[0]
             .removeChild(document.getElementsByClassName("modal-background")[0]);
@@ -103,7 +104,7 @@ function endGame(result) {
     let button = document.createElement("button");
     let buttonText = document.createTextNode("Main Menu");
     button.appendChild(buttonText);
-    button.addEventListener("click",()=>window.href="/");
+    button.addEventListener("click",()=>window.location.href="/");
     modal.appendChild(blue);
     modal.appendChild(red);
     modal.appendChild(winner);

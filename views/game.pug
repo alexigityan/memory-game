@@ -20,10 +20,10 @@ html
 
                         if teamBlue
                             p(id="joinText") Tell your friend to join room #{session}
-                            button(id="ready") Waiting...
+                            button(id="ready" disabled) Waiting...
                         else 
                             p You've joined room #{session}
-                            button(id="ready") Ready
+                            button(id="ready" class="clickable") Ready
 
 
 
