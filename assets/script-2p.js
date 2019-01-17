@@ -95,6 +95,8 @@ function endGame(result) {
     modalGray.classList.add("modal-gray");    
     let modal = document.createElement("div");
     modal.id ="info";
+    if (team==="red")
+        modal.style = "background-color:#B22222";
     let blue = document.createElement("p");
     blue.id = "blueStats";
     let red = document.createElement("p");
