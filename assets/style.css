@@ -76,6 +76,7 @@ html, body {
     display:block;
     margin:auto;
     margin-bottom:5%;
+    caret-color: transparent;
 }
 
 #info button {
