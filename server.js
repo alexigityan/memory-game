@@ -101,6 +101,7 @@ class Player {
         this.contents = [];
         this.clicks = 0;
         this.score = 0;
+        this.timer = null;
 
         this.progressGame = this.progressGame.bind(this);
         this.openBlock = this.openBlock.bind(this);
@@ -125,7 +126,11 @@ class Player {
         }
  
         if(!sessions[session].blueOpenBlocks.includes(blockId) && !sessions[session].redOpenBlocks.includes(blockId)) {
-            (this.team === "blue") ? sessions[session].blueOpenBlocks.push(blockId) : sessions[session].redOpenBlocks.push(blockId); 
+            clearTimeout(this.timer);
+            if( this.team === "blue") 
+                sessions[session].blueOpenBlocks.push(blockId)
+            else
+                sessions[session].redOpenBlocks.push(blockId); 
             this.openBlocks.push(blockId); 
             this.contents.push(iconId);
             if(blockId.toString().length<2)
@@ -135,6 +140,7 @@ class Player {
             let color = (this.team==="blue") ? "b" : "r";
             let eventText= "o"+blockId+iconId+color;
             emitter.emit(session+"openblock", eventText);
+            this.timer = setTimeout(()=>this.closeBlocks(session),5000);
             this.progressGame(session);
         }
     }

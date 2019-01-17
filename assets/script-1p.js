@@ -75,9 +75,10 @@ function endGame(result) {
     let button = document.createElement("button");
     let text = (result==="win") ? document.createTextNode("You've won!") : document.createTextNode("Your time's up!") ;
     p.appendChild(text);
-    let buttonText = document.createTextNode("Start Again");
+    let buttonText = document.createTextNode("Main Menu");
     button.appendChild(buttonText);
-    button.addEventListener("click",startNewGame);
+    button.classList.add("clickable");
+    button.addEventListener("click",()=>window.location.href="/");
     modal.appendChild(p);
     if(result==="win"){
         let clicks = document.createElement("p");

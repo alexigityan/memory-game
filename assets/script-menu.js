@@ -25,8 +25,8 @@ function joinTwoPlayer() {
         if(xhr.status === 200) {
             window.location.href="/2p/join/"+room.value;
         } else {
+            room.placeholder = "Room Not Found";
             room.value = "";
-            room.placeholder = "Room "+room.value+" Not Found";
         }
     };
     xhr.open("get", "/2p/check/"+room.value);

@@ -106,6 +106,7 @@ function endGame(result) {
     let button = document.createElement("button");
     let buttonText = document.createTextNode("Main Menu");
     button.appendChild(buttonText);
+    button.classList.add("clickable");
     button.addEventListener("click",()=>window.location.href="/");
     modal.appendChild(blue);
     modal.appendChild(red);
