@@ -1,3 +1,7 @@
+-
+    if(team==="blue") 
+        var teamBlue = true
+
 doctype html
 html
     head
@@ -13,20 +17,14 @@ html
             if player
                 div(class="modal-background")
                     div(class="modal-gray")
-                    div(id="info")
-                        -
-                            if(team==="blue") 
-                                var teamBlue = true
-
-                        if teamBlue
+                    if teamBlue
+                        div(id="info")
                             p(id="joinText") Tell your friend to join room #{session}
                             button(id="ready" disabled) Waiting...
-                        else 
+                    else
+                        div(id="info" style="background-color:#B22222")
                             p You've joined room #{session}
                             button(id="ready" class="clickable") Ready
-
-
-
 
         if player
             script(src="/script-2p.js")
